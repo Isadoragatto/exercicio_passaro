@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <title>Exercício do Pássaro</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body> 
+    <script>
+      var config = {
+        type: Phaser.AUTO,
+        width: 800,
+        height: 600,
+
+        scene: {
+          preload: preload,
+          create: create,
+          update: update,
+        },
+      };
+
+      var game = new Phaser.Game(config);
+
+      var passarinho; // nome da minha variavel
+     
+
+      function preload() { // o que voce carrega na sua maquina, como imagem, audios ou outros arquivos
+        this.load.image("bg", "assets/bg_space.png"); //adicionando a tela de fundo na tela 
+        this.load.spritesheet("bird", "assets/bird-purple.png", { //adicionando o passarinho na tela 
+          frameWidth: 75, // largura do spritesheets
+          frameHeight: 75,// altura do spritesheets
+        
+        });
+        
+        
+        };
+    
+
+      function create() { // é a criação de elementos visuais e interativos a cena, como posicionamneto de elementos, definição de interações...
+        this.add.image(400, 300, "bg").setScale(1.2); //identificar as coordenadas de onde a tela de fundo fica na tela 
+        passarinho = this.add.sprite(100, 300, "bird").setScale(1.3); //indentificar as coodernadas do passarinho e seu tamanho
+        
+          
+
+
+        this.anims.create({ // onde cria a animação para sprites
+          key: "fly",// nome da animação
+          frames: this.anims.generateFrameNumbers("bird", {start: 0, end: 7}), //onde começa e onde termina a animação
+          frameRate: 10, //velocidade da animação
+          repeat: -1 // -1 significa que ele fica infinito que a animação nunca vai parar, se tivesse 1 ela se movimentaria uma vez 
+        });
+
+        passarinho.anims.play('fly', true); // o play da animação
+      }
+
+      function update() { // o que faz seu jogo funcionar, a logica que acontecera em cada parte do jogo, como, movimento do personagem
+        if (passarinho.x === 100 && passarinho.y === 300) { // verifica a posição atual do passarinho
+          passarinho.setFlip(false, false); //defini a orientação de um sprite em relação ao eixo horizontal e vertical 
+            passarinho.ida = true;
+            
+        }
+
+        if (passarinho.x < 700 && passarinho.ida === true) { // verifica a posição x do passarinho e se é true
+            passarinho.x += 10; // o passarinho move para direita // o número 10 indica a velocidade do movimento 
+            
+        }
+
+        if (passarinho.x === 700) {// verifica se a posição do x é extamente 700
+          passarinho.setFlip(true, false); // o passarinho vira para esquerda 
+            passarinho.virar = true; // o passarinho inicia o movimento para baixo 
+            
+        
+        }
+
+        if (passarinho.y < 500 && passarinho.virar === true) {// verifica possição do y 
+            passarinho.y += 10; // passarinho move para baixo 
+           
+
+        }
+
+        if (passarinho.y === 500){ // verifica a posição y do passarinho é examente 500 
+          passarinho.virar = false; // interrompe o moviemnto para baixo 
+          passarinho.ida = false; // inicia o movimento para esquerda 
+
+        }
+
+        if (passarinho.x > 100 && passarinho.ida === false){ //verifica posição x do passarinho e se é false 
+          passarinho.x -=10; // passarinho move para esquerda 
+        }
+
+        if (passarinho.x === 100 && passarinho.y > 100 && passarinho.virar === false){ //verifica posição do passarinho x é exatamente 100 e se y é maior que 100 e se virar é false 
+          passarinho.setFlip(false, false); // volta para a direção inicial 
+          passarinho.y -=10; // o passarinho move para cima 
+        }
+      }
+
+    </script>
+  </body>
+</html>
